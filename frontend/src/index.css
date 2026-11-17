@@ -1,0 +1,66 @@
+@import 'leaflet/dist/leaflet.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-slate-50 font-sans text-slate-900 antialiased;
+  }
+}
+
+/* Custom map markers */
+.qd-marker-wrapper {
+  background: transparent;
+  border: none;
+}
+.qd-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: var(--qd-bg);
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgb(15 23 42 / 0.35);
+}
+.qd-marker--pulse::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 2px solid var(--qd-bg);
+  opacity: 0.5;
+  animation: qd-pulse 2s ease-out infinite;
+}
+@keyframes qd-pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .qd-marker--pulse::after {
+    animation: none;
+  }
+}
+
+/* Smooth rider movement between GPS updates */
+.leaflet-marker-icon.qd-marker-wrapper {
+  transition: transform 0.9s linear;
+}
+.leaflet-zoom-anim .leaflet-marker-icon.qd-marker-wrapper {
+  transition: none;
+}
+
+.leaflet-container {
+  font-family: inherit;
+}
