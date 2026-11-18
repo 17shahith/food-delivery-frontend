@@ -22,8 +22,8 @@ export default function App() {
         position="top-right"
         toastOptions={{
           duration: 3500,
-          style: { borderRadius: '12px', fontSize: '14px', maxWidth: '420px' },
-          success: { iconTheme: { primary: '#059669', secondary: '#fff' } },
+          style: { borderRadius: '12px', fontSize: '14px', maxWidth: '420px', background: '#FFF8EE', color: '#2A1B3D', border: '1px solid #E9D6BA' },
+          success: { iconTheme: { primary: '#8A72C2', secondary: '#fff' } },
         }}
       />
     </ErrorBoundary>

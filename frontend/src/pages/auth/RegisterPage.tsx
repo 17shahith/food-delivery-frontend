@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Bike, CheckCircle2, Eye, EyeOff, ShoppingBag, Store } from 'lucide-react';
+import { CheckCircle2, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { Alert, Button, Input, Select } from '@/components/ui';
@@ -8,22 +8,17 @@ import { LocationPicker } from '@/components/maps/LocationPicker';
 import { getErrorMessage } from '@/utils/errors';
 import { isValid, required, validateEmail, validatePassword, validatePhone } from '@/utils/validation';
 import { ROLE_HOME, VEHICLE_TYPES, VENDOR_CATEGORIES } from '@/utils/constants';
-import { cn } from '@/utils/cn';
 import type { LatLng, RegisterPayload, VehicleType } from '@/types';
 
 type RegRole = RegisterPayload['role'];
 
-const ROLES: { value: RegRole; label: string; description: string; icon: typeof Store }[] = [
-  { value: 'customer', label: 'Customer', description: 'Order from local shops', icon: ShoppingBag },
-  { value: 'vendor', label: 'Vendor', description: 'Sell from your store', icon: Store },
-  { value: 'rider', label: 'Rider', description: 'Deliver and earn', icon: Bike },
-];
 
-export default function RegisterPage() {
+export default function RegisterPage({ portal = 'customer' }: { portal?: RegRole }) {
+  const partner = portal !== 'customer';
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const [role, setRole] = useState<RegRole>('customer');
+  const role = portal;
   const [form, setForm] = useState({
     full_name: '',
     email: '',
@@ -115,7 +110,7 @@ export default function RegisterPage() {
         <p className="mt-2 text-sm text-slate-500">
           We sent a confirmation link to <strong>{form.email}</strong>. Confirm your email, then sign in.
         </p>
-        <Link to="/login" className="mt-6 inline-block text-sm font-medium text-brand-700 hover:text-brand-800">
+        <Link to={partner ? `/${portal}/login` : '/login'} className="mt-6 inline-block text-sm font-medium text-brand-700 hover:text-brand-800">
           Go to sign in
         </Link>
       </div>
@@ -124,36 +119,12 @@ export default function RegisterPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Create your account</h1>
-      <p className="mt-1 text-sm text-slate-500">Choose how you'll use the platform.</p>
+      <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{portal === 'vendor' ? 'Register your store' : portal === 'rider' ? 'Become a rider' : 'Create your account'}</h1>
+      <p className="mt-1 text-sm text-slate-500">
+        {portal === 'vendor' ? 'Sell to customers in your neighbourhood.' : portal === 'rider' ? 'Deliver orders in your area and earn.' : 'Order from shops in your neighbourhood.'}
+      </p>
 
       <form onSubmit={onSubmit} className="mt-6 space-y-4" noValidate>
-        <fieldset>
-          <legend className="sr-only">Account type</legend>
-          <div className="grid grid-cols-3 gap-2">
-            {ROLES.map((r) => (
-              <label
-                key={r.value}
-                className={cn(
-                  'flex cursor-pointer flex-col items-center gap-1 rounded-xl border p-3 text-center transition-colors',
-                  role === r.value ? 'border-brand-500 bg-brand-50 ring-1 ring-brand-500' : 'border-slate-200 hover:border-slate-300',
-                )}
-              >
-                <input
-                  type="radio"
-                  name="role"
-                  value={r.value}
-                  checked={role === r.value}
-                  onChange={() => setRole(r.value)}
-                  className="sr-only"
-                />
-                <r.icon className={cn('h-5 w-5', role === r.value ? 'text-brand-700' : 'text-slate-500')} aria-hidden />
-                <span className="text-sm font-medium text-slate-900">{r.label}</span>
-                <span className="hidden text-[11px] text-slate-500 sm:block">{r.description}</span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
 
         {role !== 'customer' && (
           <Alert tone="info">
@@ -260,7 +231,7 @@ export default function RegisterPage() {
 
       <p className="mt-6 text-center text-sm text-slate-500">
         Already have an account?{' '}
-        <Link to="/login" className="font-medium text-brand-700 hover:text-brand-800">
+        <Link to={partner ? `/${portal}/login` : '/login'} className="font-medium text-brand-700 hover:text-brand-800">
           Sign in
         </Link>
       </p>

@@ -32,8 +32,8 @@ export default function HomePage() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-3xl bg-gradient-to-br from-brand-600 to-emerald-800 px-6 py-8 text-white sm:px-10 sm:py-10">
-        <p className="text-sm text-brand-100">Hi {user?.full_name.split(' ')[0]} 👋</p>
+      <section className="rounded-3xl bg-gradient-to-br from-[#7E67BF] to-[#362961] px-6 py-8 text-white sm:px-10 sm:py-10">
+        <p className="text-sm text-white/75">Hi {user?.full_name.split(' ')[0]} 👋</p>
         <h1 className="mt-1 max-w-xl text-2xl font-semibold leading-tight sm:text-3xl">
           What do you need from the neighbourhood today?
         </h1>
@@ -45,14 +45,14 @@ export default function HomePage() {
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search products like milk, bread, paracetamol…"
               aria-label="Search products"
-              className="h-12 w-full rounded-xl border-0 pl-10 pr-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-white/60"
+              className="h-12 w-full rounded-xl border-0 bg-surface pl-10 pr-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-white/60"
             />
           </div>
           <Button type="submit" size="lg" variant="secondary">
             Search
           </Button>
         </form>
-        <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-brand-100">
+        <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-white/75">
           <MapPin className="h-4 w-4" aria-hidden />
           <span>{isPrecise ? 'Showing shops near your location' : 'Showing shops near the default area'}</span>
           <button
@@ -91,7 +91,7 @@ export default function HomePage() {
             <Link
               key={c}
               to={`/vendors?category=${encodeURIComponent(c)}`}
-              className="whitespace-nowrap rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:border-brand-300 hover:text-brand-700"
+              className="whitespace-nowrap rounded-full border border-slate-200 bg-surface px-4 py-2 text-sm font-medium text-slate-700 hover:border-brand-300 hover:text-brand-700"
             >
               {c}
             </Link>
@@ -131,7 +131,7 @@ export default function HomePage() {
       </section>
 
       {!activeOrders.loading && !activeOrders.data?.length && (
-        <section className="flex flex-col items-start gap-3 rounded-2xl border border-slate-200 bg-white p-5 sm:flex-row sm:items-center">
+        <section className="flex flex-col items-start gap-3 rounded-2xl border border-slate-200 bg-surface p-5 sm:flex-row sm:items-center">
           <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
             <Package className="h-5 w-5" aria-hidden />
           </span>

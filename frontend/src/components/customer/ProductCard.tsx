@@ -22,7 +22,7 @@ export function ProductCard({
   const disabled = !product.is_available || vendorClosed || !vendor;
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card">
+    <div className="flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-surface shadow-card">
       <Link to={`/products/${product.id}`} className="relative block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500">
         <ImageWithFallback
           src={product.image_url}
@@ -31,7 +31,7 @@ export function ProductCard({
           fallbackIcon={<ShoppingBasket className="h-8 w-8" />}
         />
         {!product.is_available && (
-          <span className="absolute left-3 top-3 rounded-full bg-slate-900/80 px-2.5 py-0.5 text-xs font-medium text-white">
+          <span className="absolute left-3 top-3 rounded-full bg-black/70 px-2.5 py-0.5 text-xs font-medium text-white">
             Out of stock
           </span>
         )}

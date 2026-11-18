@@ -26,7 +26,7 @@ export function NotificationMenu({ onClose, viewAllTo }: { onClose: () => void; 
   return (
     <div
       ref={ref}
-      className="absolute right-0 z-50 mt-2 w-[22rem] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg"
+      className="absolute right-0 z-50 mt-2 w-[22rem] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-slate-200 bg-surface shadow-lg"
     >
       <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
         <p className="text-sm font-semibold text-slate-900">

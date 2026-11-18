@@ -25,7 +25,7 @@ function RecenterButton({ points }: { points: LatLng[] }) {
   return (
     <button
       type="button"
-      className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow hover:bg-slate-50"
+      className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-surface text-slate-700 shadow hover:bg-slate-50"
       onClick={() => {
         if (points.length === 1) map.setView(toLatLngTuple(points[0]!), 15);
         else if (points.length > 1) map.fitBounds(L.latLngBounds(points.map(toLatLngTuple)), { padding: [48, 48] });
@@ -80,7 +80,7 @@ export function DeliveryMap({ vendor, destination, rider, self, trail = [], leg 
         />
       )}
       {trail.length > 1 && (
-        <Polyline positions={trail.map(toLatLngTuple)} pathOptions={{ color: '#059669', weight: 4, opacity: 0.85 }} />
+        <Polyline positions={trail.map(toLatLngTuple)} pathOptions={{ color: '#8A72C2', weight: 4, opacity: 0.85 }} />
       )}
 
       {v && (
@@ -123,7 +123,7 @@ export function DeliveryMap({ vendor, destination, rider, self, trail = [], leg 
             title={follow ? 'Stop following rider' : 'Follow rider'}
             aria-label={follow ? 'Stop following rider' : 'Follow rider'}
             className={`flex h-9 w-9 items-center justify-center rounded-lg border shadow ${
-              follow ? 'border-brand-600 bg-brand-600 text-white' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+              follow ? 'border-brand-600 bg-brand-600 text-slate-900' : 'border-slate-200 bg-surface text-slate-700 hover:bg-slate-50'
             }`}
           >
             <Crosshair className="h-4 w-4" />
@@ -136,9 +136,9 @@ export function DeliveryMap({ vendor, destination, rider, self, trail = [], leg 
 
 export function MapLegend({ items }: { items: ('vendor' | 'destination' | 'rider' | 'you')[] }) {
   const meta = {
-    vendor: { color: 'bg-violet-600', label: 'Pickup (shop)' },
+    vendor: { color: 'bg-orange-600', label: 'Pickup (shop)' },
     destination: { color: 'bg-blue-600', label: 'Delivery location' },
-    rider: { color: 'bg-emerald-600', label: 'Rider (live)' },
+    rider: { color: 'bg-brand-600', label: 'Rider (live)' },
     you: { color: 'bg-sky-500', label: 'You' },
   };
   return (

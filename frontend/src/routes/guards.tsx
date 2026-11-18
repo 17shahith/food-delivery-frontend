@@ -9,13 +9,21 @@ import type { Role } from '@/types';
  * Requires a signed-in user; when `roles` is given, users with other roles are
  * redirected to their own dashboard. Renders `children` or nested routes.
  */
-export function ProtectedRoute({ roles, children }: { roles?: Role[]; children?: ReactNode }) {
+export function ProtectedRoute({
+  roles,
+  children,
+  loginPath = '/login',
+}: {
+  roles?: Role[];
+  children?: ReactNode;
+  loginPath?: string;
+}) {
   const { user, initializing } = useAuth();
   const location = useLocation();
 
   if (initializing) return <FullPageLoader />;
   if (!user) {
-    return <Navigate to="/login" replace state={{ from: location.pathname + location.search }} />;
+    return <Navigate to={loginPath} replace state={{ from: location.pathname + location.search }} />;
   }
   if (roles && !roles.includes(user.role)) {
     return <Navigate to={ROLE_HOME[user.role]} replace />;

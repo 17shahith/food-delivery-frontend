@@ -6,7 +6,7 @@ import { useCart } from '@/contexts/CartContext';
 import { useNotifications } from '@/contexts/NotificationContext';
 import { Avatar, ConfirmDialog } from '@/components/ui';
 import { NotificationMenu } from '@/components/notifications/NotificationMenu';
-import { APP_NAME, ROLE_LABEL } from '@/utils/constants';
+import { APP_NAME, ROLE_LABEL, loginPathFor } from '@/utils/constants';
 import { cn } from '@/utils/cn';
 import type { Role } from '@/types';
 import { NAVIGATION, notificationsPath, profilePath } from './navigation';
@@ -14,7 +14,7 @@ import { NAVIGATION, notificationsPath, profilePath } from './navigation';
 function Brand() {
   return (
     <Link to="/" className="flex items-center gap-2.5 px-2">
-      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 text-white">
+      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 text-slate-900">
         <Zap className="h-5 w-5" aria-hidden />
       </span>
       <span className="text-lg font-semibold tracking-tight text-slate-900">{APP_NAME}</span>
@@ -53,7 +53,7 @@ function SidebarNav({ role, onNavigate }: { role: Role; onNavigate?: () => void 
                     <item.icon className="h-[18px] w-[18px] shrink-0" aria-hidden />
                     <span className="flex-1">{item.label}</span>
                     {count > 0 && (
-                      <span className="rounded-full bg-brand-600 px-2 py-0.5 text-[11px] font-semibold text-white">
+                      <span className="rounded-full bg-brand-600 px-2 py-0.5 text-[11px] font-semibold text-slate-900">
                         {count > 99 ? '99+' : count}
                       </span>
                     )}
@@ -103,7 +103,7 @@ function UserMenu({ onLogout }: { onLogout: () => void }) {
         <ChevronDown className="hidden h-4 w-4 text-slate-400 md:block" aria-hidden />
       </button>
       {open && (
-        <div role="menu" className="absolute right-0 z-50 mt-2 w-56 rounded-xl border border-slate-200 bg-white p-1 shadow-lg">
+        <div role="menu" className="absolute right-0 z-50 mt-2 w-56 rounded-xl border border-slate-200 bg-surface p-1 shadow-lg">
           <div className="border-b border-slate-100 px-3 py-2">
             <p className="truncate text-sm font-medium text-slate-900">{user.full_name}</p>
             <p className="truncate text-xs text-slate-500">{user.email}</p>
@@ -158,16 +158,17 @@ export function DashboardLayout() {
 
   const handleLogout = async () => {
     setLoggingOut(true);
+    const loginPath = loginPathFor(user.role);
     await logout();
     setLoggingOut(false);
     setConfirmLogout(false);
-    navigate('/login', { replace: true });
+    navigate(loginPath, { replace: true });
   };
 
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-slate-200 bg-white lg:flex">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-slate-200 bg-surface lg:flex">
         <div className="flex h-16 items-center border-b border-slate-100 px-4">
           <Brand />
         </div>
@@ -187,7 +188,7 @@ export function DashboardLayout() {
       {mobileOpen && (
         <div className="fixed inset-0 z-[900] lg:hidden">
           <div className="absolute inset-0 bg-slate-900/40" onClick={() => setMobileOpen(false)} aria-hidden />
-          <aside className="absolute inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col bg-white shadow-xl">
+          <aside className="absolute inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col bg-surface shadow-xl">
             <div className="flex h-16 items-center justify-between border-b border-slate-100 px-4">
               <Brand />
               <button
@@ -214,7 +215,7 @@ export function DashboardLayout() {
       )}
 
       <div className="lg:pl-64">
-        <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200 bg-white/90 px-4 backdrop-blur sm:px-6">
+        <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200 bg-surface/90 px-4 backdrop-blur sm:px-6">
           <button
             type="button"
             onClick={() => setMobileOpen(true)}
@@ -235,7 +236,7 @@ export function DashboardLayout() {
             >
               <ShoppingCart className="h-5 w-5" />
               {itemCount > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-brand-600 px-1 text-[11px] font-semibold text-white">
+                <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-brand-600 px-1 text-[11px] font-semibold text-slate-900">
                   {itemCount}
                 </span>
               )}
@@ -251,7 +252,7 @@ export function DashboardLayout() {
             >
               <Bell className="h-5 w-5" />
               {unreadCount > 0 && (
-                <span className="absolute right-1 top-1 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" aria-hidden />
+                <span className="absolute right-1 top-1 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-surface" aria-hidden />
               )}
             </button>
             {bellOpen && (

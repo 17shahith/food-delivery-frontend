@@ -8,7 +8,7 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
   return (
     <Link
       to={`/vendors/${vendor.id}`}
-      className="group block overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card transition-colors hover:border-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+      className="group block overflow-hidden rounded-2xl border border-slate-200 bg-surface shadow-card transition-colors hover:border-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
     >
       <div className="relative">
         <ImageWithFallback
@@ -18,15 +18,15 @@ export function VendorCard({ vendor }: { vendor: Vendor }) {
           fallbackIcon={<Store className="h-8 w-8" />}
         />
         {!vendor.is_open && (
-          <div className="absolute inset-0 flex items-center justify-center bg-slate-900/50">
-            <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-900">Closed now</span>
+          <div className="absolute inset-0 flex items-center justify-center bg-slate-900/40">
+            <span className="rounded-full bg-surface px-3 py-1 text-xs font-semibold text-slate-900">Closed now</span>
           </div>
         )}
         {vendor.logo_url && vendor.banner_url && (
           <img
             src={vendor.logo_url}
             alt=""
-            className="absolute -bottom-5 left-4 h-11 w-11 rounded-xl border-2 border-white bg-white object-cover shadow"
+            className="absolute -bottom-5 left-4 h-11 w-11 rounded-xl border-2 border-surface bg-surface object-cover shadow"
           />
         )}
       </div>

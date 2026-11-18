@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Bike, RotateCcw, ShieldCheck, ShoppingBag, Store } from 'lucide-react';
 import { env } from '@/utils/env';
 import { ConfirmDialog } from '@/components/ui';
+import type { Role } from '@/types';
 
 const ACCOUNTS = [
   { email: 'customer@demo.com', label: 'Customer', hint: 'Shop & track live', icon: ShoppingBag },
@@ -12,7 +13,15 @@ const ACCOUNTS = [
 export const DEMO_PASSWORD = 'demo1234';
 
 /** Demo-mode helper on the login page: one-click sign-in for each role. */
-export function DemoAccounts({ onPick, disabled }: { onPick: (email: string, password: string) => void; disabled?: boolean }) {
+export function DemoAccounts({
+  onPick,
+  disabled,
+  portal = 'customer',
+}: {
+  onPick: (email: string, password: string) => void;
+  disabled?: boolean;
+  portal?: Role;
+}) {
   const [confirmReset, setConfirmReset] = useState(false);
   if (!env.demoMode) return null;
 
@@ -21,17 +30,17 @@ export function DemoAccounts({ onPick, disabled }: { onPick: (email: string, pas
       <div className="mb-3 flex items-center justify-between gap-2">
         <p className="text-sm font-semibold text-brand-900">Demo accounts</p>
         <span className="text-xs text-brand-800">
-          Password: <code className="rounded bg-white px-1.5 py-0.5 font-mono">{DEMO_PASSWORD}</code>
+          Password: <code className="rounded bg-surface px-1.5 py-0.5 font-mono">{DEMO_PASSWORD}</code>
         </span>
       </div>
-      <div className="grid grid-cols-2 gap-2">
-        {ACCOUNTS.map((a) => (
+      <div className="grid grid-cols-1 gap-2">
+        {ACCOUNTS.filter((a) => a.email.startsWith(`${portal}@`)).map((a) => (
           <button
             key={a.email}
             type="button"
             disabled={disabled}
             onClick={() => onPick(a.email, DEMO_PASSWORD)}
-            className="flex items-start gap-2 rounded-xl border border-brand-100 bg-white p-2.5 text-left transition-colors hover:border-brand-300 disabled:opacity-60"
+            className="flex items-start gap-2 rounded-xl border border-brand-100 bg-surface p-2.5 text-left transition-colors hover:border-brand-300 disabled:opacity-60"
           >
             <a.icon className="mt-0.5 h-4 w-4 shrink-0 text-brand-700" aria-hidden />
             <span className="min-w-0">

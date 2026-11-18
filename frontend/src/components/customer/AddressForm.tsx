@@ -114,7 +114,7 @@ export function AddressFormModal({
             type="checkbox"
             checked={form.is_default}
             onChange={(e) => setForm((f) => ({ ...f, is_default: e.target.checked }))}
-            className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+            className="h-4 w-4 rounded border-slate-300 text-brand-700 focus:ring-brand-500"
           />
           Use as my default address
         </label>

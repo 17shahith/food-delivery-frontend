@@ -9,7 +9,7 @@ export function Skeleton({ className }: { className?: string }) {
 
 export function SkeletonCard({ className }: { className?: string }) {
   return (
-    <div className={cn('rounded-2xl border border-slate-200 bg-white p-4', className)} aria-hidden>
+    <div className={cn('rounded-2xl border border-slate-200 bg-surface p-4', className)} aria-hidden>
       <Skeleton className="mb-4 h-32 w-full rounded-xl" />
       <Skeleton className="mb-2 h-4 w-2/3" />
       <Skeleton className="h-3 w-1/2" />
@@ -21,7 +21,7 @@ export function SkeletonList({ rows = 4, className }: { rows?: number; className
   return (
     <div className={cn('space-y-3', className)} role="status" aria-label="Loading">
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4">
+        <div key={i} className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-surface p-4">
           <Skeleton className="h-12 w-12 rounded-xl" />
           <div className="flex-1 space-y-2">
             <Skeleton className="h-4 w-1/3" />
@@ -47,7 +47,7 @@ export function SkeletonGrid({ count = 6, className }: { count?: number; classNa
 export function Spinner({ className, label }: { className?: string; label?: string }) {
   return (
     <span role="status" className="inline-flex items-center gap-2 text-sm text-slate-500">
-      <Loader2 className={cn('h-5 w-5 animate-spin text-brand-600', className)} aria-hidden />
+      <Loader2 className={cn('h-5 w-5 animate-spin text-brand-700', className)} aria-hidden />
       {label ?? <span className="sr-only">Loading</span>}
     </span>
   );
@@ -77,7 +77,7 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center',
+        'flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-surface px-6 py-12 text-center',
         className,
       )}
     >

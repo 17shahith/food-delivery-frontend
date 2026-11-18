@@ -130,7 +130,7 @@ export default function ProductManagementPage() {
       ) : !shown.length ? (
         <EmptyState title="No products match" description="Try clearing the search or filters." />
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card">
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-surface shadow-card">
           {/* Desktop table */}
           <table className="hidden w-full text-sm md:table">
             <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">

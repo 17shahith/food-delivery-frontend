@@ -28,9 +28,9 @@ function makeIcon(path: string, bg: string, opts: { pulse?: boolean; size?: numb
   });
 }
 
-export const vendorIcon = makeIcon(svg.store, '#7c3aed');
+export const vendorIcon = makeIcon(svg.store, '#ea580c');
 export const destinationIcon = makeIcon(svg.home, '#2563eb');
-export const riderIcon = makeIcon(svg.bike, '#059669', { pulse: true, size: 40 });
+export const riderIcon = makeIcon(svg.bike, '#8A72C2', { pulse: true, size: 40 });
 export const riderIdleIcon = makeIcon(svg.bike, '#64748b', { size: 34 });
 export const customerIcon = makeIcon(svg.user, '#0ea5e9', { size: 30 });
 export const pinIcon = makeIcon(svg.pin, '#dc2626');

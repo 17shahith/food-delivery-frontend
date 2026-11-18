@@ -110,7 +110,7 @@ export default function CheckoutPage() {
                         value={a.id}
                         checked={addressId === a.id}
                         onChange={() => setAddressId(a.id)}
-                        className="mt-1 h-4 w-4 border-slate-300 text-brand-600 focus:ring-brand-500"
+                        className="mt-1 h-4 w-4 border-slate-300 text-brand-700 focus:ring-brand-500"
                       />
                       <span className="min-w-0 text-sm">
                         <span className="font-medium text-slate-900">{a.label}</span>

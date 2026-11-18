@@ -46,7 +46,7 @@ export function OrderCard({
   );
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white shadow-card transition-colors hover:border-slate-300">
+    <div className="rounded-2xl border border-slate-200 bg-surface shadow-card transition-colors hover:border-slate-300">
       {to ? (
         <Link to={to} className="block rounded-2xl p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500">
           {body}

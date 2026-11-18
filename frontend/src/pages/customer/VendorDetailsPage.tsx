@@ -75,11 +75,11 @@ export default function VendorDetailsPage() {
         <ArrowLeft className="h-4 w-4" /> All shops
       </Link>
 
-      <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-card">
+      <div className="overflow-hidden rounded-3xl border border-slate-200 bg-surface shadow-card">
         <ImageWithFallback src={v.banner_url} alt={v.name} className="h-40 w-full sm:h-56" fallbackIcon={<Store className="h-10 w-10" />} />
         <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-end sm:justify-between">
           <div className="flex items-start gap-4">
-            <ImageWithFallback src={v.logo_url} alt="" className="-mt-12 h-20 w-20 shrink-0 rounded-2xl border-4 border-white shadow" />
+            <ImageWithFallback src={v.logo_url} alt="" className="-mt-12 h-20 w-20 shrink-0 rounded-2xl border-4 border-surface shadow" />
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">{v.name}</h1>
@@ -128,8 +128,8 @@ export default function VendorDetailsPage() {
                   className={cn(
                     'whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-medium',
                     category === c
-                      ? 'border-brand-600 bg-brand-600 text-white'
-                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300',
+                      ? 'border-brand-600 bg-brand-600 text-slate-900'
+                      : 'border-slate-200 bg-surface text-slate-700 hover:border-slate-300',
                   )}
                 >
                   {c || 'All'}

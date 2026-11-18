@@ -3,15 +3,15 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 /**
  * Lightweight SVG charts (no chart dependency). Single-series only — each measure
  * gets its own chart (never a dual axis). Colors follow the validated reference
- * palette: series #2a78d6 on a white surface; recessive grid/axis ink.
+ * palette: series #6250d6 on the cream card surface; recessive grid/axis ink.
  */
 const C = {
-  series: '#2a78d6',
-  seriesFill: 'rgba(42, 120, 214, 0.12)',
-  grid: '#e1e0d9',
-  axis: '#c3c2b7',
-  muted: '#898781',
-  surface: '#ffffff',
+  series: '#6250d6',
+  seriesFill: 'rgba(98, 80, 214, 0.14)',
+  grid: '#E9D6BA',
+  axis: '#D9C2A3',
+  muted: '#76665A',
+  surface: '#FFF8EE',
 };
 
 export interface Datum {
@@ -56,7 +56,7 @@ function Tooltip({ x, y, children, containerWidth }: { x: number; y: number; chi
   return (
     <div
       role="tooltip"
-      className="pointer-events-none absolute z-10 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs shadow-lg"
+      className="pointer-events-none absolute z-10 rounded-lg border border-slate-200 bg-surface px-3 py-2 text-xs shadow-lg"
       style={{ left: x, top: y, transform: `translate(${flip ? 'calc(-100% - 10px)' : '10px'}, -50%)` }}
     >
       {children}

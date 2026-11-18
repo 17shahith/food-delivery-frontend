@@ -1,12 +1,14 @@
 import { useState, type FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ArrowLeft, MailCheck, Mail } from 'lucide-react';
 import { authService } from '@/services/authService';
 import { Alert, Button, Input } from '@/components/ui';
 import { getErrorMessage } from '@/utils/errors';
 import { validateEmail } from '@/utils/validation';
+import { loginPathFor, portalOf } from '@/utils/constants';
 
 export default function ForgotPasswordPage() {
+  const signInPath = loginPathFor(portalOf(useLocation().pathname));
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
@@ -44,7 +46,7 @@ export default function ForgotPasswordPage() {
           <Button variant="outline" onClick={() => setSent(false)}>
             Use a different email
           </Button>
-          <Link to="/login" className="text-sm font-medium text-brand-700 hover:text-brand-800">
+          <Link to={signInPath} className="text-sm font-medium text-brand-700 hover:text-brand-800">
             Back to sign in
           </Link>
         </div>
@@ -54,7 +56,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div>
-      <Link to="/login" className="mb-6 inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700">
+      <Link to={signInPath} className="mb-6 inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700">
         <ArrowLeft className="h-4 w-4" /> Back to sign in
       </Link>
       <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Forgot your password?</h1>

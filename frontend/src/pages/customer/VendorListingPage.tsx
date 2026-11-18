@@ -96,7 +96,7 @@ export default function VendorListingPage() {
         />
       </div>
 
-      <div className="mb-6 flex flex-wrap items-end gap-3 rounded-2xl border border-slate-200 bg-white p-4">
+      <div className="mb-6 flex flex-wrap items-end gap-3 rounded-2xl border border-slate-200 bg-surface p-4">
         <SlidersHorizontal className="mb-2.5 hidden h-4 w-4 text-slate-400 sm:block" aria-hidden />
         <Select
           label="Category"
@@ -131,7 +131,7 @@ export default function VendorListingPage() {
                 type="checkbox"
                 checked={openNow}
                 onChange={(e) => update({ open: e.target.checked ? '1' : null })}
-                className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                className="h-4 w-4 rounded border-slate-300 text-brand-700 focus:ring-brand-500"
               />
               Open now
             </label>
@@ -171,7 +171,7 @@ export default function VendorListingPage() {
                 type="checkbox"
                 checked={inStock}
                 onChange={(e) => update({ stock: e.target.checked ? '1' : null })}
-                className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                className="h-4 w-4 rounded border-slate-300 text-brand-700 focus:ring-brand-500"
               />
               In stock only
             </label>

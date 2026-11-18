@@ -24,7 +24,7 @@ export function DataGrid<T>({
   onRowClick?: (row: T) => void;
 }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card">
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-surface shadow-card">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[640px] text-sm">
           <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">

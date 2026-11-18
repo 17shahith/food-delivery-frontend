@@ -7,6 +7,7 @@
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
+    color-scheme: light;
   }
   body {
     @apply bg-slate-50 font-sans text-slate-900 antialiased;
@@ -63,4 +64,24 @@
 
 .leaflet-container {
   font-family: inherit;
+}
+
+/* Leaflet controls and popups on the cream theme */
+.leaflet-container {
+  background: #F4E4CC;
+}
+.leaflet-bar a,
+.leaflet-bar a:hover {
+  background-color: #FFF8EE;
+  color: #2A1B3D;
+  border-bottom-color: #E9D6BA;
+}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: #FFF8EE;
+  color: #2A1B3D;
+}
+.leaflet-control-attribution {
+  background: rgb(255 248 238 / 0.85) !important;
+  color: #76665A;
 }

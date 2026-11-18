@@ -86,7 +86,7 @@ export default function ProductDetailsPage() {
           {v && (
             <Link
               to={`/vendors/${v.id}`}
-              className="mt-6 flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3 hover:border-slate-300"
+              className="mt-6 flex items-center gap-3 rounded-2xl border border-slate-200 bg-surface p-3 hover:border-slate-300"
             >
               <ImageWithFallback src={v.logo_url} alt="" className="h-10 w-10 rounded-xl" fallbackIcon={<Store className="h-5 w-5" />} />
               <div className="min-w-0 flex-1">

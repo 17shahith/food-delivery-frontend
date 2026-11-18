@@ -76,7 +76,7 @@ export function Tabs<T extends string>({
             onClick={() => onChange(t.value)}
             className={cn(
               'flex items-center gap-2 whitespace-nowrap rounded-lg px-3.5 py-1.5 text-sm font-medium transition-colors',
-              value === t.value ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900',
+              value === t.value ? 'bg-slate-300 text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900',
             )}
           >
             {t.label}
@@ -145,7 +145,7 @@ export function StatCard({
     rose: 'bg-rose-50 text-rose-700',
   }[tone];
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-card">
+    <div className="rounded-2xl border border-slate-200 bg-surface p-5 shadow-card">
       <div className="flex items-start justify-between gap-3">
         <p className="text-sm font-medium text-slate-500">{label}</p>
         {icon && <span className={cn('flex h-9 w-9 items-center justify-center rounded-xl', toneCls)}>{icon}</span>}
@@ -239,7 +239,7 @@ export function SearchInput({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         aria-label={placeholder}
-        className="h-10 w-full rounded-xl border border-slate-300 bg-white pl-10 pr-9 text-sm placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/30 [&::-webkit-search-cancel-button]:hidden"
+        className="h-10 w-full rounded-xl border border-slate-300 bg-surface pl-10 pr-9 text-sm placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/30 [&::-webkit-search-cancel-button]:hidden"
       />
       {value && (
         <button

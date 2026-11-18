@@ -48,7 +48,7 @@ export function Modal({ open, onClose, title, description, children, footer, siz
 
   return createPortal(
     <div className="fixed inset-0 z-[1000] flex items-end justify-center p-0 sm:items-center sm:p-4">
-      <div className="absolute inset-0 bg-slate-900/50" onClick={() => !locked && onClose()} aria-hidden />
+      <div className="absolute inset-0 bg-slate-900/40" onClick={() => !locked && onClose()} aria-hidden />
       <div
         ref={panelRef}
         role="dialog"
@@ -56,7 +56,7 @@ export function Modal({ open, onClose, title, description, children, footer, siz
         aria-labelledby={titleId}
         tabIndex={-1}
         className={cn(
-          'relative flex max-h-[92vh] w-full flex-col rounded-t-2xl bg-white shadow-xl outline-none sm:rounded-2xl',
+          'relative flex max-h-[92vh] w-full flex-col rounded-t-2xl bg-surface shadow-xl outline-none sm:rounded-2xl',
           sizes[size],
         )}
       >

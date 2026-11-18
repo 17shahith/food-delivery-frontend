@@ -43,7 +43,7 @@ export default function LiveLocationPage() {
                   <Circle
                     center={toLatLngTuple(position)}
                     radius={position.accuracy}
-                    pathOptions={{ color: '#059669', fillColor: '#10b981', fillOpacity: 0.12, weight: 1 }}
+                    pathOptions={{ color: '#8A72C2', fillColor: '#B7A5DB', fillOpacity: 0.12, weight: 1 }}
                   />
                 )}
                 <Marker position={toLatLngTuple(position)} icon={riderIcon} />

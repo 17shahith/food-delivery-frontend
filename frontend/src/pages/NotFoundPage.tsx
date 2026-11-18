@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { MapPinOff } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { ROLE_HOME } from '@/utils/constants';
+import { ROLE_HOME, loginPathFor, portalOf } from '@/utils/constants';
 
 export default function NotFoundPage() {
   const { user } = useAuth();
@@ -13,8 +13,8 @@ export default function NotFoundPage() {
       <h1 className="mt-4 text-2xl font-semibold text-slate-900">Page not found</h1>
       <p className="mt-2 max-w-sm text-sm text-slate-500">The page you're looking for doesn't exist or was moved.</p>
       <Link
-        to={user ? ROLE_HOME[user.role] : '/login'}
-        className="mt-6 inline-flex h-10 items-center rounded-xl bg-brand-600 px-4 text-sm font-medium text-white hover:bg-brand-700"
+        to={user ? ROLE_HOME[user.role] : loginPathFor(portalOf(location.pathname))}
+        className="mt-6 inline-flex h-10 items-center rounded-xl bg-brand-600 px-4 text-sm font-medium text-slate-900 hover:bg-brand-500"
       >
         {user ? 'Back to dashboard' : 'Go to sign in'}
       </Link>

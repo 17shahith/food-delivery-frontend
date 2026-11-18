@@ -35,9 +35,9 @@ export function OrderTimeline({
             <span
               className={cn(
                 'relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 text-xs font-semibold',
-                step.state === 'done' && 'border-brand-500 bg-brand-500 text-white',
-                step.state === 'current' && 'border-brand-500 bg-white text-brand-600 ring-4 ring-brand-100',
-                step.state === 'upcoming' && 'border-slate-200 bg-white text-slate-400',
+                step.state === 'done' && 'border-brand-600 bg-brand-600 text-slate-900',
+                step.state === 'current' && 'border-brand-500 bg-surface text-brand-700 ring-4 ring-brand-100',
+                step.state === 'upcoming' && 'border-slate-200 bg-surface text-slate-400',
                 step.state === 'halted' && 'border-red-500 bg-red-500 text-white',
               )}
             >

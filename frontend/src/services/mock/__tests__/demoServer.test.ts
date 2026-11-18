@@ -84,7 +84,9 @@ describe('demo backend', () => {
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(start + 70_000);
     const mine = await call<Order[]>('GET', '/orders/me', customer);
-    const sim = mine.find((o) => o.vendor?.name === 'Spice Route Kitchen' && o.status !== 'delivered')!;
+    const sim = mine.find(
+      (o) => o.vendor?.name === 'Spice Route Kitchen' && !['delivered', 'cancelled', 'rejected'].includes(o.status),
+    )!;
     expect(sim.status).toBe('out_for_delivery');
     const a = await call<RiderLocation>('GET', `/tracking/orders/${sim.id}`, customer);
     vi.setSystemTime(start + 110_000);

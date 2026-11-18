@@ -66,7 +66,7 @@ export default function VendorDashboardPage() {
         description="Today's activity at your store."
         actions={
           store.data && (
-            <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-2">
+            <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-surface px-4 py-2">
               <span className="text-sm font-medium text-slate-700">{store.data.is_open ? 'Open for orders' : 'Closed'}</span>
               <Toggle checked={store.data.is_open} onChange={(v) => void toggleOpen(v)} disabled={toggling} label="Store open" />
             </div>

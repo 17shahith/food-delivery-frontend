@@ -15,12 +15,12 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-brand-600 text-white hover:bg-brand-700 focus-visible:ring-brand-500',
-  secondary: 'bg-slate-900 text-white hover:bg-slate-800 focus-visible:ring-slate-500',
-  outline: 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus-visible:ring-slate-400',
+  primary: 'bg-brand-600 text-slate-900 hover:bg-brand-500 focus-visible:ring-brand-500',
+  secondary: 'bg-slate-900 text-slate-50 hover:bg-slate-800 focus-visible:ring-slate-500',
+  outline: 'border border-slate-300 bg-surface text-slate-700 hover:bg-slate-50 focus-visible:ring-slate-400',
   ghost: 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-slate-400',
   danger: 'bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500',
-  success: 'bg-emerald-600 text-white hover:bg-emerald-700 focus-visible:ring-emerald-500',
+  success: 'bg-emerald-600 text-slate-900 hover:bg-emerald-500 focus-visible:ring-emerald-500',
 };
 
 const sizes: Record<Size, string> = {

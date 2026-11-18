@@ -45,13 +45,14 @@ If Supabase isn't configured the app still works: live views fall back to pollin
 
 | Role | Path prefix | Pages |
 |---|---|---|
-| Auth | `/login`, `/register`, `/forgot-password`, `/reset-password` | Sign in, role-based sign-up (vendor store pin / rider vehicle), password recovery |
-| Customer | `/` | Home, Browse (shops + product search/filters), Vendor details, Product details, Cart, Checkout, My orders, Live tracking (`/orders/:id`), Notifications, Profile & addresses |
+| Customer auth | `/login`, `/register`, `/forgot-password`, `/reset-password` | Customer sign-in and sign-up (customer accounts only) |
+| Staff auth | `/vendor/login`, `/rider/login`, `/admin/login` (+ `/vendor/register`, `/rider/register`, `/<role>/forgot-password`) | Each portal has its own sign-in; vendors and riders can sign up (store pin / vehicle) |
+| Customer (main site) | `/` | Home, Browse (shops + product search/filters), Vendor details, Product details, Cart, Checkout, My orders, Live tracking (`/orders/:id`), Notifications, Profile & addresses |
 | Vendor | `/vendor` | Dashboard (open/closed toggle, stats), Products (search, availability toggles, delete), Add/Edit product (image upload), Incoming orders (accept/reject/prepare/ready), Order details, Order history, Store profile |
 | Rider | `/rider` | Dashboard (online toggle, stats), Available deliveries (accept/skip, route preview), My deliveries, Delivery details (map, directions, progress), Live location sharing, Delivery history, Rider profile |
 | Admin | `/admin` | Dashboard, Customers, Vendors (approve/reject/revoke), Riders (approve/reject), Orders (filter + detail), Live monitoring map, Analytics |
 
-Routes are protected by role (`src/routes/guards.tsx`). A signed-in user who opens another role's URL is redirected to their own dashboard. Vendor and rider accounts show an approval notice until an admin approves them.
+Routes are protected by role (`src/routes/guards.tsx`). The customer app is the main site; the vendor, rider and admin portals live at `/vendor`, `/rider` and `/admin`, each with its own sign-in page (`/<role>/login`). A signed-in user who opens another role's URL is redirected to their own dashboard, and signed-out visitors to a portal are sent to that portal's sign-in. Vendor and rider accounts show an approval notice until an admin approves them.
 
 ### Order lifecycle
 

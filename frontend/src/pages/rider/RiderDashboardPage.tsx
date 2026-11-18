@@ -71,7 +71,7 @@ export default function RiderDashboardPage() {
               <span
                 className={cn(
                   'flex h-12 w-12 items-center justify-center rounded-2xl',
-                  online ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-500',
+                  online ? 'bg-emerald-600 text-slate-900' : 'bg-slate-200 text-slate-500',
                 )}
               >
                 <Bike className="h-6 w-6" aria-hidden />

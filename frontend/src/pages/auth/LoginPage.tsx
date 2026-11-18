@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Alert, Button, Input } from '@/components/ui';
 import { getErrorMessage } from '@/utils/errors';
 import { validateEmail } from '@/utils/validation';
-import { ROLE_HOME } from '@/utils/constants';
+import { ROLE_HOME, ROLE_LABEL } from '@/utils/constants';
 import type { Role } from '@/types';
 import { DemoAccounts } from '@/components/DemoAccounts';
 
@@ -16,7 +16,8 @@ function canVisit(role: Role, path: string): boolean {
   return path === `/${role}` || path.startsWith(`/${role}/`);
 }
 
-export default function LoginPage() {
+export default function LoginPage({ portal = 'customer' }: { portal?: Role }) {
+  const staff = portal !== 'customer';
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -53,8 +54,10 @@ export default function LoginPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Sign in</h1>
-      <p className="mt-1 text-sm text-slate-500">Welcome back. Enter your details to continue.</p>
+      <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{staff ? `${ROLE_LABEL[portal]} sign in` : 'Sign in'}</h1>
+      <p className="mt-1 text-sm text-slate-500">
+        {staff ? `Sign in to the ${ROLE_LABEL[portal].toLowerCase()} dashboard.` : 'Welcome back. Enter your details to continue.'}
+      </p>
 
       <form onSubmit={onSubmit} className="mt-8 space-y-4" noValidate>
         {formError && <Alert tone="error">{formError}</Alert>}
@@ -91,7 +94,7 @@ export default function LoginPage() {
           }
         />
         <div className="flex justify-end">
-          <Link to="/forgot-password" className="text-sm font-medium text-brand-700 hover:text-brand-800">
+          <Link to={staff ? `/${portal}/forgot-password` : '/forgot-password'} className="text-sm font-medium text-brand-700 hover:text-brand-800">
             Forgot password?
           </Link>
         </div>
@@ -101,6 +104,7 @@ export default function LoginPage() {
       </form>
 
       <DemoAccounts
+        portal={portal}
         disabled={loading}
         onPick={(e, p) => {
           setEmail(e);
@@ -110,11 +114,35 @@ export default function LoginPage() {
         }}
       />
 
-      <p className="mt-8 text-center text-sm text-slate-500">
-        New here?{' '}
-        <Link to="/register" className="font-medium text-brand-700 hover:text-brand-800">
-          Create an account
-        </Link>
+      {portal !== 'admin' && (
+        <p className="mt-8 text-center text-sm text-slate-500">
+          {portal === 'vendor' ? 'Want to sell on QuickDrop?' : portal === 'rider' ? 'Want to deliver with us?' : 'New here?'}{' '}
+          <Link to={staff ? `/${portal}/register` : '/register'} className="font-medium text-brand-700 hover:text-brand-800">
+            {portal === 'vendor' ? 'Register your store' : portal === 'rider' ? 'Become a rider' : 'Create an account'}
+          </Link>
+        </p>
+      )}
+      <p className="mt-3 text-center text-xs text-slate-500">
+        {staff ? (
+          <Link to="/login" className="hover:text-slate-300">
+            Shopping? Go to the customer sign-in →
+          </Link>
+        ) : (
+          <>
+            Partner sign-in:{' '}
+            <Link to="/vendor/login" className="hover:text-slate-300">
+              Vendor
+            </Link>{' '}
+            ·{' '}
+            <Link to="/rider/login" className="hover:text-slate-300">
+              Rider
+            </Link>{' '}
+            ·{' '}
+            <Link to="/admin/login" className="hover:text-slate-300">
+              Admin
+            </Link>
+          </>
+        )}
       </p>
     </div>
   );

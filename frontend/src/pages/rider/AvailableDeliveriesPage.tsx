@@ -134,7 +134,7 @@ export default function AvailableDeliveriesPage() {
                     </div>
                     <div className="space-y-2 text-sm">
                       <p className="flex items-start gap-2">
-                        <Store className="mt-0.5 h-4 w-4 shrink-0 text-violet-600" aria-hidden />
+                        <Store className="mt-0.5 h-4 w-4 shrink-0 text-orange-600" aria-hidden />
                         <span>
                           <span className="font-medium text-slate-900">{o.vendor?.name}</span>
                           <span className="block text-slate-500">

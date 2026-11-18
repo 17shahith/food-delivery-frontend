@@ -42,7 +42,7 @@ export interface DB {
 }
 
 const KEY = 'qd.demo.db';
-const VERSION = 1;
+const VERSION = 3; // bump to reseed (v3: cream-theme images)
 export const DEMO_PASSWORD = 'demo1234';
 
 export const DEMO_ACCOUNTS = [
@@ -201,7 +201,7 @@ function seed(): DB {
   });
 
   const vendors: Vendor[] = [
-    vendor('v-freshmart', 'u-vendor', 'Fresh Mart', 'Grocery', '🛒', '#d1fae5', offset(CENTER, 0.8, 1.2), {
+    vendor('v-freshmart', 'u-vendor', 'Fresh Mart', 'Grocery', '🛒', '#ede9fe', offset(CENTER, 0.8, 1.2), {
       description: 'Your neighbourhood supermarket — staples, fresh produce and daily essentials.',
       address: '12, 100 Feet Road, Indiranagar',
       rating: 4.6,
@@ -236,7 +236,7 @@ function seed(): DB {
       min_order_amount: 149,
       avg_prep_minutes: 20,
     }),
-    vendor('v-orchard', 'u-v5', 'Orchard Fresh', 'Fruits & Vegetables', '🍎', '#dcfce7', offset(CENTER, 2.2, 1.8), {
+    vendor('v-orchard', 'u-v5', 'Orchard Fresh', 'Fruits & Vegetables', '🍎', '#fae8ff', offset(CENTER, 2.2, 1.8), {
       description: 'Farm-fresh fruits and vegetables delivered daily.',
       address: '3, Double Road, Shanthinagar',
       rating: 4.5,
@@ -253,7 +253,7 @@ function seed(): DB {
       is_open: false,
       opening_hours: '6:00 AM – 11:00 AM',
     }),
-    vendor('v-greenleaf', 'u-v7', 'Green Leaf Organics', 'Grocery', '🥬', '#ecfccb', offset(CENTER, 3.0, -2.0), {
+    vendor('v-greenleaf', 'u-v7', 'Green Leaf Organics', 'Grocery', '🥬', '#f3e8ff', offset(CENTER, 3.0, -2.0), {
       description: 'Certified organic groceries.',
       address: '90, Koramangala 5th Block',
       approval_status: 'pending',
@@ -280,7 +280,7 @@ function seed(): DB {
     price,
     category,
     unit,
-    image_url: svgImage(emoji, '#f8fafc'),
+    image_url: svgImage(emoji, '#FFF8EE'),
     is_available: true,
     stock: 50,
     created_at: created,
