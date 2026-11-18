@@ -15,6 +15,8 @@ npm install
 npm run dev                 # http://localhost:5173
 ```
 
+To try the app without a backend, create `.env.local` with `VITE_DEMO_MODE=true` (see [Demo mode](#demo-mode)). `.env.local` overrides `.env` and is ignored by git.
+
 | Script | What it does |
 |---|---|
 | `npm run dev` | Dev server with hot reload |
@@ -38,6 +40,32 @@ npm run dev                 # http://localhost:5173
 > **Never put the Supabase service-role key in this app.** Everything under `VITE_` is shipped to the browser. The frontend only uses the anon key, and Row Level Security decides what each user can read.
 
 If Supabase isn't configured the app still works: live views fall back to polling the API (tracking every 10 s, orders every 15 s, notifications every 30 s).
+
+---
+
+## Demo mode
+
+With `VITE_DEMO_MODE=true`, Axios requests are answered by an in-browser backend (`src/services/mock/`) instead of FastAPI:
+
+- `db.ts` seeds users, shops, products, addresses, 30 days of order history and a few live situations, and saves them in `localStorage` (`qd.demo.db`). Bump `VERSION` to force a reseed.
+- `server.ts` implements the same endpoints and business rules as the backend contract below, including role checks and allowed status transitions.
+- Orders at shops without a demo sign-in progress automatically, with a simulated rider moving along the route. **Fresh Mart** (`vendor@demo.com`) orders wait for the vendor and `rider@demo.com` to act, so the whole flow can be tried by hand.
+- Polling intervals are shortened (2–4 s) so changes show quickly, and notifications that arrive through polling are shown as toasts.
+
+Demo accounts all use the password `demo1234`: `customer@demo.com`, `vendor@demo.com`, `rider@demo.com`, `admin@demo.com`. Each sign-in page lists its own account, and **Reset data** restores the seed.
+
+---
+
+## Theme
+
+The colours are set in `tailwind.config.js` rather than in individual components:
+
+- `slate` is a warm neutral scale from **Coconut Cream** (`50` = `#FBEFDD`, the page background) to deep plum (`900` = `#2A1B3D`, body text).
+- `surface` (`#FFF8EE`) is the card and panel colour.
+- `brand` is **Borahae Purple**. Step `600` is the swatch `#B7A5DB`, used for fills with dark plum text on top; steps `700–950` are deeper shades for purple text and links. `emerald`, `green` and `violet` point to the same scale.
+- Status colours outside the purple keep their meaning: blue, amber, teal, red, and fuchsia for "ready for pickup". On maps, the shop marker is orange and the rider is purple.
+
+Change the palette in that one file to re-theme the app.
 
 ---
 
@@ -100,7 +128,7 @@ src/
 - **Password recovery:** `POST /auth/forgot-password` sends a Supabase recovery email that redirects to `/reset-password`, where `supabase.auth.updateUser` sets the new password.
 - **Single-vendor cart.** An order comes from one shop. Adding an item from another shop asks the user to confirm before the cart is replaced.
 - **Rider GPS** runs in a context mounted by the rider layout, so sharing continues while the rider moves between pages. Uploads are throttled to one every 5 s at most, and only after the rider moves 15 m or more, with a heartbeat every 30 s.
-- **Maps** use OpenStreetMap tiles and HTML `DivIcon` markers, which avoids Leaflet's PNG marker problem under bundlers. Distance is the haversine distance × 1.3 road factor, and the ETA assumes 22 km/h. Both are shown as estimates.
+- **Maps** use OpenStreetMap data with CARTO Voyager tiles and HTML `DivIcon` markers, which avoids Leaflet's PNG marker problem under bundlers. Distance is the haversine distance × 1.3 road factor, and the ETA assumes 22 km/h. Both are shown as estimates.
 - **Charts** are small custom SVG components (no chart library). Each chart shows a single series, has hover tooltips and a table view, and uses a colour validated for contrast and colour-blind safety.
 
 ---
@@ -226,15 +254,18 @@ Supabase Realtime applies these policies because the socket is authorised with t
 npm test
 ```
 
-37 tests across 4 files cover:
+42 tests across 5 files cover:
 
 - **utils**: geo distance/ETA, formatting, order-timeline building (including rejected orders), next-action rules, FastAPI error parsing, validation, API list unwrapping, chart ticks
 - **CartContext**: reducer merge/clamp/vendor-switch, totals, localStorage persistence and restore
 - **components**: OrderTimeline, badges, Button, Toggle, QuantityStepper, ConfirmDialog (required reason), Empty/Error states, OrderCard
 - **route guards**: redirect when signed out, role gating, cross-role redirect, the login page for signed-in users, clearing an invalid session
+- **demo backend**: all four demo logins, the full customer → vendor → rider → delivered flow, transition and ownership rules, the auto-progressing order with a moving rider, admin analytics and approvals, registration
+
+`src/test/setup.ts` installs an in-memory `localStorage` when needed. Node 25+ ships its own experimental `localStorage`, which otherwise hides jsdom's and breaks the tests.
 
 ## Browser support and notes
 
 - Modern evergreen browsers. Live GPS needs HTTPS (or `localhost`) and location permission.
 - Riders should keep the app open during a delivery. Browsers pause GPS for pages in background tabs.
-- OpenStreetMap tiles are subject to the [OSM tile usage policy](https://operations.osmfoundation.org/policies/tiles/). For production traffic, use a tile provider or host your own tiles, and change the `TileLayer` URL in `src/components/maps/BaseMap.tsx`.
+- Map tiles come from CARTO's public basemaps (OpenStreetMap data). They have [usage limits](https://carto.com/basemaps), so for production traffic use a tile provider plan or host your own tiles, and change the `TileLayer` URL in `src/components/maps/BaseMap.tsx`.
