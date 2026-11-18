@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { Bell, ChevronDown, LogOut, Menu, ShoppingCart, User as UserIcon, X, Zap } from 'lucide-react';
+import { Bell, ChevronDown, Menu, ShoppingCart, User as UserIcon, X, Zap } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { useNotifications } from '@/contexts/NotificationContext';
-import { Avatar, ConfirmDialog } from '@/components/ui';
+import { Avatar } from '@/components/ui';
 import { NotificationMenu } from '@/components/notifications/NotificationMenu';
-import { APP_NAME, ROLE_LABEL, loginPathFor } from '@/utils/constants';
+import { APP_NAME, ROLE_LABEL } from '@/utils/constants';
 import { cn } from '@/utils/cn';
 import type { Role } from '@/types';
 import { NAVIGATION, notificationsPath, profilePath } from './navigation';
@@ -68,7 +68,7 @@ function SidebarNav({ role, onNavigate }: { role: Role; onNavigate?: () => void 
   );
 }
 
-function UserMenu({ onLogout }: { onLogout: () => void }) {
+function UserMenu() {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -121,17 +121,6 @@ function UserMenu({ onLogout }: { onLogout: () => void }) {
               <UserIcon className="h-4 w-4" aria-hidden /> Profile
             </button>
           )}
-          <button
-            role="menuitem"
-            type="button"
-            onClick={() => {
-              setOpen(false);
-              onLogout();
-            }}
-            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-red-600 hover:bg-red-50"
-          >
-            <LogOut className="h-4 w-4" aria-hidden /> Sign out
-          </button>
         </div>
       )}
     </div>
@@ -139,15 +128,12 @@ function UserMenu({ onLogout }: { onLogout: () => void }) {
 }
 
 export function DashboardLayout() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const { itemCount } = useCart();
   const { unreadCount } = useNotifications();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [confirmLogout, setConfirmLogout] = useState(false);
-  const [loggingOut, setLoggingOut] = useState(false);
   const [bellOpen, setBellOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => {
     setMobileOpen(false);
@@ -155,15 +141,6 @@ export function DashboardLayout() {
   }, [location.pathname]);
 
   if (!user) return null;
-
-  const handleLogout = async () => {
-    setLoggingOut(true);
-    const loginPath = loginPathFor(user.role);
-    await logout();
-    setLoggingOut(false);
-    setConfirmLogout(false);
-    navigate(loginPath, { replace: true });
-  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -173,15 +150,6 @@ export function DashboardLayout() {
           <Brand />
         </div>
         <SidebarNav role={user.role} />
-        <div className="border-t border-slate-100 p-3">
-          <button
-            type="button"
-            onClick={() => setConfirmLogout(true)}
-            className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-red-50 hover:text-red-600"
-          >
-            <LogOut className="h-[18px] w-[18px]" aria-hidden /> Sign out
-          </button>
-        </div>
       </aside>
 
       {/* Mobile drawer */}
@@ -201,15 +169,6 @@ export function DashboardLayout() {
               </button>
             </div>
             <SidebarNav role={user.role} onNavigate={() => setMobileOpen(false)} />
-            <div className="border-t border-slate-100 p-3">
-              <button
-                type="button"
-                onClick={() => setConfirmLogout(true)}
-                className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-red-50 hover:text-red-600"
-              >
-                <LogOut className="h-[18px] w-[18px]" aria-hidden /> Sign out
-              </button>
-            </div>
           </aside>
         </div>
       )}
@@ -259,7 +218,7 @@ export function DashboardLayout() {
               <NotificationMenu onClose={() => setBellOpen(false)} viewAllTo={notificationsPath(user.role)} />
             )}
           </div>
-          <UserMenu onLogout={() => setConfirmLogout(true)} />
+          <UserMenu />
         </header>
 
         <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -267,16 +226,6 @@ export function DashboardLayout() {
         </main>
       </div>
 
-      <ConfirmDialog
-        open={confirmLogout}
-        onClose={() => setConfirmLogout(false)}
-        onConfirm={handleLogout}
-        loading={loggingOut}
-        title="Sign out?"
-        message="You will need to sign in again to access your dashboard."
-        confirmLabel="Sign out"
-        tone="danger"
-      />
     </div>
   );
 }

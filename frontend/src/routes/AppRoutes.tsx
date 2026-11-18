@@ -1,16 +1,10 @@
 import { lazy, Suspense, type ReactNode } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { AuthLayout } from '@/layouts/AuthLayout';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { DashboardLayout } from '@/layouts/DashboardLayout';
 import { RiderLayout } from '@/layouts/RiderLayout';
 import { Spinner } from '@/components/ui';
-import { ProtectedRoute, PublicOnlyRoute } from './guards';
+import { ProtectedRoute } from './guards';
 
-// Auth
-import LoginPage from '@/pages/auth/LoginPage';
-import RegisterPage from '@/pages/auth/RegisterPage';
-import ForgotPasswordPage from '@/pages/auth/ForgotPasswordPage';
-import ResetPasswordPage from '@/pages/auth/ResetPasswordPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 
 // Code-split dashboards
@@ -66,27 +60,20 @@ function Page({ children }: { children: ReactNode }) {
 export function AppRoutes() {
   return (
     <Routes>
-      {/* Authentication */}
-      <Route element={<PublicOnlyRoute />}>
-        <Route element={<AuthLayout />}>
-          {/* Customers (main site) */}
-          <Route path="/login" element={<LoginPage portal="customer" />} />
-          <Route path="/register" element={<RegisterPage portal="customer" />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          {/* Staff portals, each with its own sign-in */}
-          <Route path="/vendor/login" element={<LoginPage portal="vendor" />} />
-          <Route path="/vendor/register" element={<RegisterPage portal="vendor" />} />
-          <Route path="/vendor/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/rider/login" element={<LoginPage portal="rider" />} />
-          <Route path="/rider/register" element={<RegisterPage portal="rider" />} />
-          <Route path="/rider/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/admin/login" element={<LoginPage portal="admin" />} />
-          <Route path="/admin/forgot-password" element={<ForgotPasswordPage />} />
-        </Route>
-      </Route>
-      <Route element={<AuthLayout />}>
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
-      </Route>
+      {/* No sign-in pages: old auth URLs go straight to the module's home. */}
+      <Route path="/login" element={<Navigate to="/" replace />} />
+      <Route path="/register" element={<Navigate to="/" replace />} />
+      <Route path="/forgot-password" element={<Navigate to="/" replace />} />
+      <Route path="/reset-password" element={<Navigate to="/" replace />} />
+      <Route path="/vendor/login" element={<Navigate to="/vendor" replace />} />
+      <Route path="/vendor/register" element={<Navigate to="/vendor" replace />} />
+      <Route path="/vendor/forgot-password" element={<Navigate to="/vendor" replace />} />
+      <Route path="/rider/login" element={<Navigate to="/rider" replace />} />
+      <Route path="/rider/register" element={<Navigate to="/rider" replace />} />
+      <Route path="/rider/forgot-password" element={<Navigate to="/rider" replace />} />
+      <Route path="/admin/login" element={<Navigate to="/admin" replace />} />
+      <Route path="/admin/register" element={<Navigate to="/admin" replace />} />
+      <Route path="/admin/forgot-password" element={<Navigate to="/admin" replace />} />
 
       {/* Customer */}
       <Route element={<ProtectedRoute roles={['customer']} />}>
@@ -105,7 +92,7 @@ export function AppRoutes() {
       </Route>
 
       {/* Vendor */}
-      <Route path="/vendor" element={<ProtectedRoute roles={['vendor']} loginPath="/vendor/login" />}>
+      <Route path="/vendor" element={<ProtectedRoute roles={['vendor']} />}>
         <Route element={<DashboardLayout />}>
           <Route index element={<Page><VendorDashboard /></Page>} />
           <Route path="products" element={<Page><ProductManagement /></Page>} />
@@ -120,7 +107,7 @@ export function AppRoutes() {
       </Route>
 
       {/* Rider */}
-      <Route path="/rider" element={<ProtectedRoute roles={['rider']} loginPath="/rider/login" />}>
+      <Route path="/rider" element={<ProtectedRoute roles={['rider']} />}>
         <Route element={<RiderLayout />}>
           <Route index element={<Page><RiderDashboard /></Page>} />
           <Route path="available" element={<Page><AvailableDeliveries /></Page>} />
@@ -134,7 +121,7 @@ export function AppRoutes() {
       </Route>
 
       {/* Admin */}
-      <Route path="/admin" element={<ProtectedRoute roles={['admin']} loginPath="/admin/login" />}>
+      <Route path="/admin" element={<ProtectedRoute roles={['admin']} />}>
         <Route element={<DashboardLayout />}>
           <Route index element={<Page><AdminDashboard /></Page>} />
           <Route path="customers" element={<Page><CustomerManagement /></Page>} />

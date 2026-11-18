@@ -34,6 +34,7 @@ To try the app without a backend, create `.env.local` with `VITE_DEMO_MODE=true`
 | `VITE_DEMO_MODE` | no | `true` runs against the in-browser mock backend (no FastAPI or Supabase needed); `false` uses the real backend |
 | `VITE_SUPABASE_URL` | for realtime | Supabase project URL |
 | `VITE_SUPABASE_ANON_KEY` | for realtime | Supabase **public anon** key |
+| `VITE_<ROLE>_EMAIL` / `VITE_<ROLE>_PASSWORD` | no | Account each module signs in with automatically (`CUSTOMER`, `VENDOR`, `RIDER`, `ADMIN`); default `<role>@demo.com` / `demo1234` |
 | `VITE_DEFAULT_LAT` / `VITE_DEFAULT_LNG` | no | Map centre when browser location is unavailable |
 | `VITE_CURRENCY` | no | ISO currency for display (default `INR`) |
 
@@ -52,7 +53,7 @@ With `VITE_DEMO_MODE=true`, Axios requests are answered by an in-browser backend
 - Orders at shops without a demo sign-in progress automatically, with a simulated rider moving along the route. **Fresh Mart** (`vendor@demo.com`) orders wait for the vendor and `rider@demo.com` to act, so the whole flow can be tried by hand.
 - Polling intervals are shortened (2–4 s) so changes show quickly, and notifications that arrive through polling are shown as toasts.
 
-Demo accounts all use the password `demo1234`: `customer@demo.com`, `vendor@demo.com`, `rider@demo.com`, `admin@demo.com`. Each sign-in page lists its own account, and **Reset data** restores the seed.
+Demo accounts all use the password `demo1234`: `customer@demo.com`, `vendor@demo.com`, `rider@demo.com`, `admin@demo.com`. Each module signs in with its account automatically.
 
 ---
 
@@ -73,14 +74,12 @@ Change the palette in that one file to re-theme the app.
 
 | Role | Path prefix | Pages |
 |---|---|---|
-| Customer auth | `/login`, `/register`, `/forgot-password`, `/reset-password` | Customer sign-in and sign-up (customer accounts only) |
-| Staff auth | `/vendor/login`, `/rider/login`, `/admin/login` (+ `/vendor/register`, `/rider/register`, `/<role>/forgot-password`) | Each portal has its own sign-in; vendors and riders can sign up (store pin / vehicle) |
 | Customer (main site) | `/` | Home, Browse (shops + product search/filters), Vendor details, Product details, Cart, Checkout, My orders, Live tracking (`/orders/:id`), Notifications, Profile & addresses |
 | Vendor | `/vendor` | Dashboard (open/closed toggle, stats), Products (search, availability toggles, delete), Add/Edit product (image upload), Incoming orders (accept/reject/prepare/ready), Order details, Order history, Store profile |
 | Rider | `/rider` | Dashboard (online toggle, stats), Available deliveries (accept/skip, route preview), My deliveries, Delivery details (map, directions, progress), Live location sharing, Delivery history, Rider profile |
 | Admin | `/admin` | Dashboard, Customers, Vendors (approve/reject/revoke), Riders (approve/reject), Orders (filter + detail), Live monitoring map, Analytics |
 
-Routes are protected by role (`src/routes/guards.tsx`). The customer app is the main site; the vendor, rider and admin portals live at `/vendor`, `/rider` and `/admin`, each with its own sign-in page (`/<role>/login`). A signed-in user who opens another role's URL is redirected to their own dashboard, and signed-out visitors to a portal are sent to that portal's sign-in. Vendor and rider accounts show an approval notice until an admin approves them.
+There are no login pages. The customer app is the main site (landing page at `/`); the vendor, rider and admin portals live at `/vendor`, `/rider` and `/admin`. Opening a module with no session, or a session for another role, signs in automatically with that module's account (`src/routes/guards.tsx`, `src/utils/autoLogin.ts`), configured with `VITE_<ROLE>_EMAIL` / `VITE_<ROLE>_PASSWORD` (default `<role>@demo.com` / `demo1234`). Old auth URLs redirect to the module's home. Vendor and rider accounts show an approval notice until an admin approves them.
 
 ### Order lifecycle
 
@@ -259,7 +258,7 @@ npm test
 - **utils**: geo distance/ETA, formatting, order-timeline building (including rejected orders), next-action rules, FastAPI error parsing, validation, API list unwrapping, chart ticks
 - **CartContext**: reducer merge/clamp/vendor-switch, totals, localStorage persistence and restore
 - **components**: OrderTimeline, badges, Button, Toggle, QuantityStepper, ConfirmDialog (required reason), Empty/Error states, OrderCard
-- **route guards**: redirect when signed out, role gating, cross-role redirect, the login page for signed-in users, clearing an invalid session
+- **route guards**: automatic sign-in per module, switching accounts across modules, clearing an invalid session, retry on sign-in failure
 - **demo backend**: all four demo logins, the full customer → vendor → rider → delivered flow, transition and ownership rules, the auto-progressing order with a moving rider, admin analytics and approvals, registration
 
 `src/test/setup.ts` installs an in-memory `localStorage` when needed. Node 25+ ships its own experimental `localStorage`, which otherwise hides jsdom's and breaks the tests.

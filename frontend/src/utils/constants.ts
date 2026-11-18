@@ -5,11 +5,6 @@ export const APP_NAME = 'QuickDrop';
 /** Staff portals live at /vendor, /rider and /admin; the customer app is the main site. */
 export const STAFF_ROLES = ['vendor', 'rider', 'admin'] as const;
 
-/** Sign-in page for each role: /login for customers, /<role>/login for staff. */
-export function loginPathFor(role: Role | null | undefined): string {
-  return role && role !== 'customer' ? `/${role}/login` : '/login';
-}
-
 /** The staff portal a URL belongs to, or null for the customer site. */
 export function portalOf(pathname: string): Exclude<Role, 'customer'> | null {
   const seg = pathname.split('/')[1] ?? '';

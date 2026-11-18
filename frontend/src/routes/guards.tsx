@@ -1,40 +1,56 @@
-import type { ReactNode } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useEffect, useState, type ReactNode } from 'react';
+import { Outlet } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { FullPageLoader } from '@/components/ui';
-import { ROLE_HOME } from '@/utils/constants';
+import { Button, FullPageLoader } from '@/components/ui';
+import { getErrorMessage } from '@/utils/errors';
 import type { Role } from '@/types';
 
 /**
- * Requires a signed-in user; when `roles` is given, users with other roles are
- * redirected to their own dashboard. Renders `children` or nested routes.
+ * There is no login page: when the visitor has no session, or a session for a
+ * different module, this signs in automatically as the module's account
+ * (see utils/autoLogin) and then renders `children` or nested routes.
  */
-export function ProtectedRoute({
-  roles,
-  children,
-  loginPath = '/login',
-}: {
-  roles?: Role[];
-  children?: ReactNode;
-  loginPath?: string;
-}) {
-  const { user, initializing } = useAuth();
-  const location = useLocation();
+export function ProtectedRoute({ roles, children }: { roles: Role[]; children?: ReactNode }) {
+  const { user, initializing, signInAs } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
+  const role = roles[0];
+  const allowed = !!user && roles.includes(user.role);
 
-  if (initializing) return <FullPageLoader />;
-  if (!user) {
-    return <Navigate to={loginPath} replace state={{ from: location.pathname + location.search }} />;
-  }
-  if (roles && !roles.includes(user.role)) {
-    return <Navigate to={ROLE_HOME[user.role]} replace />;
-  }
-  return children ? <>{children}</> : <Outlet />;
-}
+  useEffect(() => {
+    if (initializing || allowed || error) return;
+    let cancelled = false;
+    signInAs(role).then(
+      (u) => {
+        if (!cancelled && !roles.includes(u.role)) {
+          setError(`The configured ${role} account has the role "${u.role}".`);
+        }
+      },
+      (err) => {
+        if (!cancelled) setError(getErrorMessage(err, `Could not open the ${role} module.`));
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initializing, allowed, error, role, attempt, signInAs]);
 
-/** Auth pages: signed-in users are sent to their dashboard. */
-export function PublicOnlyRoute({ children }: { children?: ReactNode }) {
-  const { user, initializing } = useAuth();
-  if (initializing) return <FullPageLoader />;
-  if (user) return <Navigate to={ROLE_HOME[user.role]} replace />;
+  if (error) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-50 px-4 text-center">
+        <p className="max-w-md text-sm text-slate-600">{error}</p>
+        <Button
+          onClick={() => {
+            setError(null);
+            setAttempt((a) => a + 1);
+          }}
+        >
+          Try again
+        </Button>
+      </div>
+    );
+  }
+  if (initializing || !allowed) return <FullPageLoader />;
   return children ? <>{children}</> : <Outlet />;
 }

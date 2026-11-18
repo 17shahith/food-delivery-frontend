@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/contexts/AuthContext';
-import { ProtectedRoute, PublicOnlyRoute } from '../guards';
+import { ProtectedRoute } from '../guards';
 import type { User } from '@/types';
 
 // A plain function (not vi.fn) so a rejected `me()` isn't reported by the spy as a test error.
@@ -22,8 +22,9 @@ const me = {
     meImpl = fn;
   },
 };
+const login = vi.fn();
 vi.mock('@/services/authService', () => ({
-  authService: { me: () => meImpl(), login: vi.fn(), register: vi.fn(), logout: vi.fn() },
+  authService: { me: () => meImpl(), login: (...a: unknown[]) => login(...a), register: vi.fn(), logout: vi.fn() },
 }));
 
 const user = (role: User['role']): User => ({
@@ -40,7 +41,6 @@ function renderAt(path: string) {
     <MemoryRouter initialEntries={[path]}>
       <AuthProvider>
         <Routes>
-          <Route path="/login" element={<PublicOnlyRoute><p>login page</p></PublicOnlyRoute>} />
           <Route element={<ProtectedRoute roles={['customer']} />}>
             <Route path="/" element={<p>customer home</p>} />
           </Route>
@@ -54,41 +54,47 @@ function renderAt(path: string) {
 }
 
 describe('route guards', () => {
-  beforeEach(() => me.mockReset());
-
-  it('redirects anonymous users to login', async () => {
-    renderAt('/vendor');
-    expect(await screen.findByText('login page')).toBeInTheDocument();
+  beforeEach(() => {
+    me.mockReset();
+    login.mockReset();
+    login.mockImplementation(async (email: string) => user(email.split('@')[0] as User['role']));
   });
 
-  it('lets the right role through', async () => {
+  it('signs anonymous visitors in to the module automatically', async () => {
+    renderAt('/vendor');
+    expect(await screen.findByText('vendor home')).toBeInTheDocument();
+    expect(login).toHaveBeenCalledWith('vendor@demo.com', 'demo1234');
+  });
+
+  it('lets the right role through without signing in again', async () => {
     localStorage.setItem('qd.tokens', JSON.stringify({ access_token: 't' }));
     me.mockResolvedValue(user('vendor'));
     renderAt('/vendor');
     expect(await screen.findByText('vendor home')).toBeInTheDocument();
+    expect(login).not.toHaveBeenCalled();
   });
 
-  it('sends other roles to their own dashboard', async () => {
+  it('switches to the module account when another role opens it', async () => {
     localStorage.setItem('qd.tokens', JSON.stringify({ access_token: 't' }));
     me.mockResolvedValue(user('vendor'));
     renderAt('/');
-    expect(await screen.findByText('vendor home')).toBeInTheDocument();
-  });
-
-  it('keeps signed-in users off the login page', async () => {
-    localStorage.setItem('qd.tokens', JSON.stringify({ access_token: 't' }));
-    me.mockResolvedValue(user('customer'));
-    renderAt('/login');
     expect(await screen.findByText('customer home')).toBeInTheDocument();
+    expect(login).toHaveBeenCalledWith('customer@demo.com', 'demo1234');
   });
 
-  it('clears an invalid stored session', async () => {
+  it('clears an invalid stored session and signs in again', async () => {
     localStorage.setItem('qd.tokens', JSON.stringify({ access_token: 'bad' }));
     me.mockImplementation(async () => {
       throw new Error('401');
     });
     renderAt('/');
-    expect(await screen.findByText('login page')).toBeInTheDocument();
-    await waitFor(() => expect(localStorage.getItem('qd.tokens')).toBeNull());
+    expect(await screen.findByText('customer home')).toBeInTheDocument();
+    await waitFor(() => expect(login).toHaveBeenCalled());
+  });
+
+  it('shows a retry when automatic sign-in fails', async () => {
+    login.mockRejectedValue(new Error('backend down'));
+    renderAt('/');
+    expect(await screen.findByRole('button', { name: 'Try again' })).toBeInTheDocument();
   });
 });

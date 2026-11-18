@@ -2,7 +2,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { authService } from '@/services/authService';
 import { AUTH_EXPIRED_EVENT, TOKENS_REFRESHED_EVENT, tokenStore, type StoredTokens } from '@/services/api';
 import { authorizeRealtime } from '@/services/supabase';
-import type { RegisterPayload, User } from '@/types';
+import { autoLoginCredentials } from '@/utils/autoLogin';
+import type { RegisterPayload, Role, User } from '@/types';
 
 interface AuthContextValue {
   user: User | null;
@@ -12,6 +13,8 @@ interface AuthContextValue {
   login: (email: string, password: string) => Promise<User>;
   register: (payload: RegisterPayload) => Promise<User | null>;
   logout: () => Promise<void>;
+  /** Signs in with the configured account for `role`, replacing any current session. */
+  signInAs: (role: Role) => Promise<User>;
   refreshUser: () => Promise<void>;
   setUser: (user: User) => void;
 }
@@ -76,6 +79,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUserState(null);
   }, []);
 
+  const signInAs = useCallback(async (role: Role) => {
+    const { email, password } = autoLoginCredentials(role);
+    const u = await authService.login(email, password);
+    setUserState(u);
+    return u;
+  }, []);
+
   const refreshUser = useCallback(async () => {
     const me = await authService.me();
     setUserState(me);
@@ -89,10 +99,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       register,
       logout,
+      signInAs,
       refreshUser,
       setUser: setUserState,
     }),
-    [user, initializing, login, register, logout, refreshUser],
+    [user, initializing, login, register, logout, signInAs, refreshUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

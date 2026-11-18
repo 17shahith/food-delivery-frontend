@@ -44,18 +44,18 @@ Create `frontend/.env.local` containing:
 VITE_DEMO_MODE=true
 ```
 
-Then restart `npm run dev`. Every sign-in page shows its demo account. The password for all of them is **`demo1234`**:
+Then restart `npm run dev`. There is no login page: each module opens directly and signs in with its demo account (password **`demo1234`**):
 
-| Role | Sign-in page | Email |
+| Role | Address | Account |
 |---|---|---|
-| Customer | http://localhost:5173/login | `customer@demo.com` |
-| Vendor (owns *Fresh Mart*) | http://localhost:5173/vendor/login | `vendor@demo.com` |
-| Rider | http://localhost:5173/rider/login | `rider@demo.com` |
-| Admin | http://localhost:5173/admin/login | `admin@demo.com` |
+| Customer | http://localhost:5173/ | `customer@demo.com` |
+| Vendor (owns *Fresh Mart*) | http://localhost:5173/vendor | `vendor@demo.com` |
+| Rider | http://localhost:5173/rider | `rider@demo.com` |
+| Admin | http://localhost:5173/admin | `admin@demo.com` |
 
 **Things to try:**
 
-- **See live tracking straight away:** sign in as the customer and open the *Spice Route Kitchen* order on the home page. It progresses on its own, and within about a minute a rider starts moving towards you.
+- **See live tracking straight away:** open the home page and pick the *Spice Route Kitchen* order. It progresses on its own, and within about a minute a rider starts moving towards you.
 - **Run the full flow by hand:**
   1. As the customer, order from **Fresh Mart**.
   2. As the vendor, accept the order, start preparing it and mark it ready.
@@ -88,14 +88,14 @@ Demo data is saved only in your browser. **Reset data** in the demo box puts it 
 
 ## Site map
 
-| Area | Address | Sign-in |
-|---|---|---|
-| Customer shop (main site) | `/` | `/login` · sign up at `/register` |
-| Vendor dashboard | `/vendor` | `/vendor/login` · sign up at `/vendor/register` |
-| Rider dashboard | `/rider` | `/rider/login` · sign up at `/rider/register` |
-| Admin dashboard | `/admin` | `/admin/login` (no public sign-up) |
+| Area | Address |
+|---|---|
+| Customer shop (main site, landing page) | `/` |
+| Vendor dashboard | `/vendor` |
+| Rider dashboard | `/rider` |
+| Admin dashboard | `/admin` |
 
-New vendors and riders need an admin's approval before they can operate. Each person only gets into their own area. Opening another role's address sends them back to their own dashboard.
+There are no login pages. Opening a module signs in automatically with that module's account (set with `VITE_<ROLE>_EMAIL` / `VITE_<ROLE>_PASSWORD`, default `<role>@demo.com` / `demo1234`). Old sign-in URLs such as `/login` or `/vendor/login` redirect to the module's home.
 
 ---
 
